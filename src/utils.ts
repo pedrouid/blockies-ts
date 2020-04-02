@@ -1,4 +1,6 @@
-import { random, seededRandom } from './random';
+import { random, seedRandomness } from './random';
+import { BlockiesOptions } from './types';
+import { DEFAULT_SIZE, DEFAULT_SCALE } from './constants';
 
 export function createColor() {
   //saturation is the whole color spectrum
@@ -12,16 +14,16 @@ export function createColor() {
   return color;
 }
 
-export function createImageData(size) {
+export function createImageData(size: number) {
   let width = size; // Only support square icons for now
   let height = size;
 
   let dataWidth = Math.ceil(width / 2);
   let mirrorWidth = width - dataWidth;
 
-  let data: any[] = [];
+  let data: number[] = [];
   for (let y = 0; y < height; y++) {
-    let row: any[] = [];
+    let row: number[] = [];
     for (let x = 0; x < dataWidth; x++) {
       // this makes foreground and background color to have a 43% (1/2.3) probability
       // spot color has 13% chance
@@ -39,19 +41,18 @@ export function createImageData(size) {
   return data;
 }
 
-export function parseOptions(opts) {
-  let newOpts: any = {};
-
-  newOpts.seed =
+export function parseOptions(opts: Partial<BlockiesOptions>): BlockiesOptions {
+  const seed =
     opts.seed || Math.floor(Math.random() * Math.pow(10, 16)).toString(16);
 
-  seededRandom(newOpts.seed);
+  seedRandomness(seed);
 
-  newOpts.size = opts.size || 8;
-  newOpts.scale = opts.scale || 4;
-  newOpts.color = opts.color || createColor();
-  newOpts.bgcolor = opts.bgcolor || createColor();
-  newOpts.spotcolor = opts.spotcolor || createColor();
-
-  return newOpts;
+  return {
+    seed,
+    size: opts.size || DEFAULT_SIZE,
+    scale: opts.scale || DEFAULT_SCALE,
+    color: opts.color || createColor(),
+    bgcolor: opts.bgcolor || createColor(),
+    spotcolor: opts.spotcolor || createColor(),
+  };
 }

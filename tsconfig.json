@@ -13,7 +13,7 @@
     "lib": ["es2017", "dom", "esnext.asynciterable"],
     "module": "esnext",
     "moduleResolution": "node",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noFallthroughCasesInSwitch": true,
